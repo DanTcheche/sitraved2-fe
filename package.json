@@ -7,7 +7,7 @@
   },
   "scripts": {
     "serve": "node_modules/.bin/vue-cli-service serve",
-    "build": "node_modules/.bin/vue-cli-service build",
+    "build": "node_modules/.bin/vue-cli-service build --mode production",
     "test:unit": "node_modules/.bin/vue-cli-service test:unit",
     "lint": "node_modules/.bin/vue-cli-service lint",
     "start": "node server.js"
