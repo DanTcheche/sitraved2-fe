@@ -4,15 +4,18 @@ export default {
   namespaced: true,
   state: () => ({
     movies: null,
-    loading: false
+    loading: false,
+    selectedMovie: null
   }),
   getters: {
     movies: (state) => state.movies,
-    loading: (state) => state.loading
+    loading: (state) => state.loading,
+    selectedMovie: (state) => state.selectedMovie
   },
   mutations: {
     setMovies: (state, movies) => (state.movies = movies),
-    setLoading: (state, loading) => (state.loading = loading)
+    setLoading: (state, loading) => (state.loading = loading),
+    setSelectedMovie: (state, selectedMovie) => (state.selectedMovie = selectedMovie)
   },
   actions: {
     async search({ commit }, params) {

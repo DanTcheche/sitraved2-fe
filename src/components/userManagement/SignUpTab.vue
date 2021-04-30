@@ -28,18 +28,21 @@
               v-model="rePassword"
               :rules="rules.rePasswordRules"
               label="Confirm password"
+              @keyup.native.enter="register"
             />
           </v-col>
           <v-alert
             v-if="errorMessage"
             color="pink darken-1"
             dark
+            height="36"
+            class="alert"
           >
             {{ errorMessage }}
           </v-alert>
           <v-spacer></v-spacer>
           <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
-            <v-btn x-large block :disabled="!valid || loading" color="success" @click="register">Register</v-btn>
+            <v-btn x-large block :disabled="!valid || loading" color="success" @click="register">Sign Up</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -95,5 +98,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .alert {
+    margin-left: 10px;
+  }
 </style>

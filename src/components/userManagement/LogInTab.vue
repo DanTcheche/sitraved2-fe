@@ -12,19 +12,20 @@
               />
           </v-col>
           <v-col cols="12">
-            <password-field
+            <password-field @keyup.native.enter="login"
               v-model="password"
               label="Password"
             />
           </v-col>
-          <v-alert
-            v-if="errorMessage"
-            color="pink darken-1"
-            dark
-          >
-            {{ errorMessage }}
-          </v-alert>
           <v-col class="d-flex" cols="12" sm="6" xsm="12">
+            <v-alert
+              v-if="errorMessage"
+              color="pink darken-1"
+              dark
+              height="36"
+            >
+              {{ errorMessage }}
+            </v-alert>
           </v-col>
           <v-spacer></v-spacer>
           <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>

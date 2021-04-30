@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import user from "./modules/user";
 import moviesSearch from "./modules/moviesSearch";
+import movieRecommendations from "./modules/movieRecommendations";
 
 Vue.use(Vuex);
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     async init({ commit, dispatch }) {
       commit("setInitialized", false);
       await dispatch("user/init");
+      await dispatch("movieRecommendations/init");
       commit("setInitialized", true);
     },
     toggleUserManagementDialog({ commit }, newState) {
@@ -36,6 +38,7 @@ export default new Vuex.Store({
   },
   modules: {
     user: user,
-    moviesSearch: moviesSearch
+    moviesSearch: moviesSearch,
+    movieRecommendations: movieRecommendations
   }
 });

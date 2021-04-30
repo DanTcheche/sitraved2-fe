@@ -41,7 +41,7 @@ export default {
         return { success: response.data.success };
       } catch (err) {
         const response = err.response;
-        if (response.status === 400) {
+        if (response && response.status === 400) {
           return { success: false, message: response.data.non_field_errors[0] };
         } else {
           return { success: false, message: "Unexpected error." };

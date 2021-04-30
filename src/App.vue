@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
 
-    <nav-bar @toggleDrawer="toggleDrawer"/>
+    <nav-bar @toggleDrawer="toggleDrawer" :showing-drawer="this.showDrawer" />
 
     <drawer v-model="showDrawer"/>
 
@@ -14,6 +14,7 @@
       </v-container>
     </v-main>
 
+    <notifications position="top right" ignore-duplicates />
   </v-app>
 </template>
 
@@ -35,7 +36,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      showDrawer: false
+      showDrawer: true
     };
   },
   computed: {

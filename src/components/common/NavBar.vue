@@ -2,7 +2,10 @@
   <v-app-bar
     app
   >
-    <v-app-bar-nav-icon style="display: none" @click="$emit('toggleDrawer')"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="$emit('toggleDrawer')">
+      <v-icon v-if="!showingDrawer">mdi-filter</v-icon>
+      <v-icon v-else>mdi-filter-off</v-icon>
+    </v-app-bar-nav-icon>
 
     <v-toolbar-title>Sitraved</v-toolbar-title>
 
@@ -59,7 +62,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "NavBar",
-  components: {},
+  props: {
+    showingDrawer: Boolean
+  },
   computed: {
     ...mapGetters(["initialized"]),
     ...mapGetters("user", ["user"])

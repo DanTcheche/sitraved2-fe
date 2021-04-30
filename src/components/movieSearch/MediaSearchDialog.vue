@@ -1,16 +1,8 @@
 <template>
-  <v-dialog v-model="dialog" @click:outside="hideRecommendationDialog" persistent max-width="800px" min-width="360px">
+  <v-dialog v-model="dialog" persistent max-width="1000px" min-width="360px" >
     <div>
-      <v-tabs v-model="tab" show-arrows icons-and-text dark grow>
-        <v-tabs-slider color="darken-4"></v-tabs-slider>
-        <v-tab v-for="(tab, index) in tabs" :key="index">
-          <v-icon large>{{ tab.icon }}</v-icon>
-          <div class="caption py-1">{{ tab.name }}</div>
-        </v-tab>
-        <v-tab-item>
-          <movies-search />
-        </v-tab-item>
-      </v-tabs>
+      <movies-search v-if="tab === 0"  />
+      <add-recommendation v-if="tab === 1" @back="tab = 0" />
     </div>
   </v-dialog>
 </template>
@@ -18,29 +10,38 @@
 <script>
 
 import MoviesSearch from "@/components/movieSearch/MoviesSearch";
+import AddRecommendation from "@/components/movieSearch/AddRecommendation";
+import { mapGetters } from "vuex";
 export default {
   name: "MediaSearchDialog",
-  components: { MoviesSearch },
+  components: { AddRecommendation, MoviesSearch },
+  computed: {
+    ...mapGetters("moviesSearch", ["selectedMovie"])
+  },
   data() {
     return {
       dialog: true,
       tab: 0,
-      tabs: [
-        { name: "Movie", icon: "fas fa-film" }
-      ]
+      totalTabs: 2
     };
   },
   beforeDestroy() {
     this.$store.dispatch("moviesSearch/clear");
   },
-  methods: {
-    hideRecommendationDialog() {
-      this.$store.dispatch("toggleRecommendationDialog", false);
+  watch: {
+    selectedMovie() {
+      if (this.selectedMovie) {
+        this.tab = 1;
+      }
+    },
+    tab() {
+      if (this.tab !== this.totalTabs - 1) {
+        this.$store.commit("moviesSearch/setSelectedMovie", null);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

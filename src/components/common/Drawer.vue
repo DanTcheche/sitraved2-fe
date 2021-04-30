@@ -2,7 +2,7 @@
   <v-navigation-drawer
     v-model="showDrawer"
     fixed
-    temporary
+    app
   />
 </template>
 

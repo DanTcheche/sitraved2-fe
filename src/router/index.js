@@ -8,6 +8,11 @@ const routes = [
     path: "/",
     name: "RecommendationsLanding",
     component: () => import(/* webpackChunkName: "recommendationsLanding" */ "../views/RecommendationsLanding.vue")
+  },
+  {
+    path: "*",
+    name: "PageNotFound",
+    component: () => import(/* webpackChunkName: "pageNotFound" */ "../views/PageNotFound.vue")
   }
 ];
 
