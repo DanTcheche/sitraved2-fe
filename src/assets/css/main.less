@@ -1,5 +1,6 @@
 @import "./variables";
 @import "movie-card";
+@import "recommendation-card";
 
 button {
     &.primary {
@@ -11,7 +12,13 @@ button {
     }
 }
 
-// SCROLLBAR NAVIGATION //
+.v-app-bar {
+    &.v-app-bar--fixed {
+        z-index: 100000;
+    }
+}
+
+    // SCROLLBAR NAVIGATION //
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -32,4 +39,9 @@ button {
 
 .v-alert {
     padding: 10px;
+}
+
+.confirmation-btn__text {
+    white-space: pre-line;
+    padding-top: 15px !important;
 }
