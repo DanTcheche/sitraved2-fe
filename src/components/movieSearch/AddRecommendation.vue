@@ -79,13 +79,15 @@ export default {
         response = await this.$store.dispatch("movieRecommendations/addComment",
           {
             tmdb_id: this.selectedMovie.id,
-            description: this.description
+            description: this.description,
+            reloadPage: true
           });
       } else {
         response = await this.$store.dispatch("movieRecommendations/addRecommendation",
           {
             tmdb_id: this.selectedMovie.id,
-            description: this.description
+            description: this.description,
+            reloadPage: true
           });
       }
       if (!response.success) {
