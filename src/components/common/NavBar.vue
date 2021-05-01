@@ -2,7 +2,7 @@
   <v-app-bar
     app
   >
-    <v-app-bar-nav-icon @click="$emit('toggleDrawer')">
+    <v-app-bar-nav-icon v-if="false" @click="$emit('toggleDrawer')">
       <v-icon v-if="!showingDrawer">mdi-filter</v-icon>
       <v-icon v-else>mdi-filter-off</v-icon>
     </v-app-bar-nav-icon>

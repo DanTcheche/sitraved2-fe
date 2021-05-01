@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      showDrawer: true
+      showDrawer: false
     };
   },
   computed: {
