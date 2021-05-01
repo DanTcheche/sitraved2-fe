@@ -18,13 +18,16 @@ export default {
     setNextPage: (state, nextPage) => (state.nextPage = nextPage)
   },
   actions: {
-    async init({ dispatch }) {
-      await dispatch("getRecommendations");
+    async init({ commit, dispatch }) {
+      commit("setNextPage", 1);
+      commit("setMovieRecommendations", null);
+      await dispatch("getRecommendations", true);
     },
-    async addRecommendation({ commit }, params) {
+    async addRecommendation({ commit, dispatch }, params) {
       commit("setLoading", true);
       try {
         await axios.post("/recommendations/movies/", params);
+        dispatch("init");
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
@@ -32,10 +35,11 @@ export default {
         commit("setLoading", false);
       }
     },
-    async addComment({ commit }, params) {
+    async addComment({ commit, dispatch }, params) {
       commit("setLoading", true);
       try {
         await axios.post("/recommendations/comments/", params);
+        dispatch("init");
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
@@ -54,7 +58,10 @@ export default {
           recommendations = state.movieRecommendations.concat(response.data.results);
         }
         commit("setMovieRecommendations", recommendations);
+        console.log("next page");
+        console.log(state.nextPage);
         const nextPage = response.data.next ? response.data.next.split("=")[1] : null;
+        console.log(nextPage);
         commit("setNextPage", nextPage);
         return { success: true };
       } catch (err) {

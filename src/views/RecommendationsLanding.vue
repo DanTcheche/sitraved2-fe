@@ -17,7 +17,7 @@
         <movie-card :movie="movieRecommendation.movie" />
       </v-col>
     </v-row>
-    <v-row v-if="nextPage" align="center" justify="space-around">
+    <v-row v-if="nextPage && nextPage !== 1" align="center" justify="space-around">
       <v-btn v-intersect="getNextPage" :loading="loading" @click="getNextPage">
         Load More
       </v-btn>
