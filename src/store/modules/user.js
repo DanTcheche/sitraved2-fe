@@ -37,7 +37,6 @@ export default {
           commit("setToken", response.data.access_token);
           commit("setUser", response.data.user);
           dispatch("initializeAxiosInterceptors");
-          dispatch("movieRecommendations/getRecommendationsMoviesIds", {}, { root: true });
         }
         return { success: response.data.success };
       } catch (err) {
@@ -63,7 +62,6 @@ export default {
           commit("setToken", response.data.access_token);
           commit("setUser", response.data.user);
           dispatch("initializeAxiosInterceptors");
-          dispatch("movieRecommendations/getRecommendationsMoviesIds", {}, { root: true });
         }
         return { success: response.data.success };
       } catch (err) {
@@ -94,7 +92,6 @@ export default {
       const response = await axios.get("/users/current/");
       if (response.status === 200) {
         commit("setUser", response.data.user);
-        dispatch("movieRecommendations/getRecommendationsMoviesIds", {}, { root: true });
       } else {
         commit("setUser", null);
       }

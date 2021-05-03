@@ -1,18 +1,11 @@
 <template>
   <div id="recommendation-card">
     <movie-card :movie="movieRecommendation.movie" />
-    <confirmation-btn v-if="movieRecommendation.user.username === user.username"
-      text="You are about to delete your own recommendation, are you sure you want to continue?"
-      icon
-      :color="color"
-      @click="toggleRecommendation" >
-      <v-icon v-if="recommendedByUser">mdi-thumb-up</v-icon>
-      <v-icon v-else>mdi-thumb-up-outline</v-icon>
-    </confirmation-btn>
-    <v-btn v-else
+    <v-btn
       class="recommendation-card-like-button"
       icon
       :color="color"
+      :disabled="loading"
       @click="toggleRecommendation" >
       <v-icon v-if="recommendedByUser">mdi-thumb-up</v-icon>
       <v-icon v-else>mdi-thumb-up-outline</v-icon>
@@ -23,16 +16,20 @@
 <script>
 import MovieCard from "@/components/common/MovieCard";
 import { mapGetters } from "vuex";
-import ConfirmationBtn from "@/components/common/ConfirmationBtn";
 export default {
   name: "MovieRecommendationCard",
-  components: { ConfirmationBtn, MovieCard },
+  components: { MovieCard },
   props: {
     movieRecommendation: Object
   },
+  data() {
+    return {
+      comment: null,
+      loading: false
+    };
+  },
   computed: {
     ...mapGetters("user", ["user"]),
-    ...mapGetters("movieRecommendations", ["recommendationMoviesIds"]),
     color() {
       if (this.recommendedByUser) {
         return "primary";
@@ -40,28 +37,45 @@ export default {
       return "warning";
     },
     recommendedByUser() {
-      return this.recommendationMoviesIds && this.recommendationMoviesIds.includes(this.movieRecommendation.movie.id);
+      return this.isOwner || this.comment;
+    },
+    isOwner() {
+      return this.user && this.movieRecommendation.user.username === this.user.username;
     }
+  },
+  created() {
+    this.comment = this.movieRecommendation.comment;
   },
   methods: {
     async toggleRecommendation() {
+      let response = null;
       if (!this.user) {
         this.$store.dispatch("toggleUserManagementDialog", true);
         return;
       }
+      this.loading = true;
       if (this.recommendedByUser) {
+        if (this.isOwner) {
+          this.$notify({ type: "error", text: "You cannot delete a movie you recommended." });
+        } else {
+          response = await this.$store.dispatch("movieRecommendations/deleteComment", this.comment);
+          if (response.success) {
+            this.comment = null;
+          }
+        }
       } else {
-        const response = await this.$store.dispatch("movieRecommendations/addComment",
+        response = await this.$store.dispatch("movieRecommendations/addComment",
           {
             tmdb_id: this.movieRecommendation.movie.tmdb_id,
             reloadPage: false
           });
         if (response.success) {
-          const addedMovieIds = JSON.parse(JSON.stringify(this.recommendationMoviesIds));
-          addedMovieIds.push(this.movieRecommendation.movie.id);
-          this.$store.commit("movieRecommendations/setRecommendationMoviesIds", addedMovieIds);
+          this.comment = response.comment;
+        } else {
+          this.$notify({ type: "error", text: response.message });
         }
       }
+      this.loading = false;
     }
   }
 };

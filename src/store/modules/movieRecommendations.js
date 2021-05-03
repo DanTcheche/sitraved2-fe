@@ -5,18 +5,15 @@ export default {
   state: () => ({
     movieRecommendations: null,
     loading: false,
-    nextPage: 1,
-    recommendationMoviesIds: null
+    nextPage: 1
   }),
   getters: {
     movieRecommendations: (state) => state.movieRecommendations,
-    recommendationMoviesIds: (state) => state.recommendationMoviesIds,
     loading: (state) => state.loading,
     nextPage: (state) => state.nextPage
   },
   mutations: {
     setMovieRecommendations: (state, movies) => (state.movieRecommendations = movies),
-    setRecommendationMoviesIds: (state, moviesIds) => (state.recommendationMoviesIds = moviesIds),
     setLoading: (state, loading) => (state.loading = loading),
     setNextPage: (state, nextPage) => (state.nextPage = nextPage)
   },
@@ -31,8 +28,7 @@ export default {
       try {
         await axios.post("/recommendations/movies/", params);
         if (params.reloadPage) {
-          dispatch("init");
-          dispatch("getRecommendationsMoviesIds");
+          await dispatch("init");
         }
         return { success: true };
       } catch (err) {
@@ -41,14 +37,35 @@ export default {
         commit("setLoading", false);
       }
     },
-    async addComment({ commit, dispatch }, params) {
+    async deleteRecommendation({ commit, dispatch, state }, params) {
       commit("setLoading", true);
       try {
-        await axios.post("/recommendations/comments/", params);
+        await axios.delete(`/recommendations/movies/${params.recommendation.id}`);
+        commit("setMovieRecommendations", state.movieRecommendations.filter(movieRecommendation => movieRecommendation !== params.recommendation.id));
+      } catch (err) {
+        return { success: false, message: "Unexpected server error." };
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async addComment({ commit, dispatch, state }, params) {
+      commit("setLoading", true);
+      try {
+        const response = await axios.post("/recommendations/comments/", params);
         if (params.reloadPage) {
           dispatch("init");
-          dispatch("getRecommendationsMoviesIds");
         }
+        return { success: true, comment: response.data.movie_recommendation.comment };
+      } catch (err) {
+        return { success: false, message: "Unexpected server error." };
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async deleteComment({ commit, dispatch, state }, commentId) {
+      commit("setLoading", true);
+      try {
+        await axios.delete(`/recommendations/comments/${commentId}/`);
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
@@ -69,18 +86,6 @@ export default {
         commit("setMovieRecommendations", recommendations);
         const nextPage = response.data.next ? response.data.next.split("=")[1] : null;
         commit("setNextPage", nextPage);
-        return { success: true };
-      } catch (err) {
-        return { success: false, message: "Unexpected server error." };
-      } finally {
-        commit("setLoading", false);
-      }
-    },
-    async getRecommendationsMoviesIds({ commit }) {
-      commit("setLoading", true);
-      try {
-        const response = await axios.get("/recommendations/recommendation-movies-ids/");
-        commit("setRecommendationMoviesIds", response.data);
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
