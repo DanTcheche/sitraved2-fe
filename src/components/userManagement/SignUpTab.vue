@@ -42,7 +42,7 @@
           </v-alert>
           <v-spacer></v-spacer>
           <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
-            <v-btn x-large block :disabled="!valid || loading" color="success" @click="register">Sign Up</v-btn>
+            <v-btn x-large block :disabled="!valid || loading || !allFieldsFilled" color="success" @click="register">Sign Up</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -70,6 +70,11 @@ export default {
       loading: false,
       errorMessage: null
     };
+  },
+  computed: {
+    allFieldsFilled() {
+      return this.username !== null && this.email !== null && this.password !== null && this.rePassword !== null;
+    }
   },
   methods: {
     async register() {
