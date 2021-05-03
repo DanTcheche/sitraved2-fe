@@ -18,6 +18,11 @@
               <p v-if="movie.year" class="text-center">
                 {{ movie.year }}
               </p>
+              <p v-if="recommender" class="recommended-by">Recommended by:
+                <span class="font-weight-bold recommender">
+                  {{ recommender }}
+                </span>
+              </p>
               <v-chip v-if="movie.already_recommended_by" class="text-center" color="error" style="max-width: 210px;">Already recommended by you</v-chip>
             </v-overlay>
           </v-fade-transition>
@@ -32,7 +37,8 @@ export default {
   name: "MovieCard",
   props: {
     movie: Object,
-    withAddButton: Boolean
+    withAddButton: Boolean,
+    recommender: String
   },
   methods: {
     selectMovie() {

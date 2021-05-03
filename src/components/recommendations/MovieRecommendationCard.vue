@@ -1,6 +1,6 @@
 <template>
   <div id="recommendation-card">
-    <movie-card :movie="movieRecommendation.movie" />
+    <movie-card :movie="movieRecommendation.movie" :recommender="capitalizeFirstLetter(movieRecommendation.user.username)"/>
     <v-btn
       class="recommendation-card-like-button"
       icon
@@ -76,6 +76,9 @@ export default {
         }
       }
       this.loading = false;
+    },
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
   }
 };
