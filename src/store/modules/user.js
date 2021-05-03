@@ -88,7 +88,7 @@ export default {
         commit("setUser", null);
       }
     },
-    async loadCurrentUser({ commit }) {
+    async loadCurrentUser({ commit, dispatch }) {
       const response = await axios.get("/users/current/");
       if (response.status === 200) {
         commit("setUser", response.data.user);

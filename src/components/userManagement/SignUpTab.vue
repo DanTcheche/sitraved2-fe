@@ -71,6 +71,11 @@ export default {
       errorMessage: null
     };
   },
+  computed: {
+    allFieldsFilled() {
+      return this.username !== null && this.email !== null && this.password !== null && this.rePassword !== null;
+    }
+  },
   methods: {
     async register() {
       this.loading = true;

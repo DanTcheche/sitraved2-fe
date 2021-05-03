@@ -27,7 +27,9 @@ export default {
       commit("setLoading", true);
       try {
         await axios.post("/recommendations/movies/", params);
-        dispatch("init");
+        if (params.reloadPage) {
+          await dispatch("init");
+        }
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
@@ -35,11 +37,35 @@ export default {
         commit("setLoading", false);
       }
     },
-    async addComment({ commit, dispatch }, params) {
+    async deleteRecommendation({ commit, dispatch, state }, params) {
       commit("setLoading", true);
       try {
-        await axios.post("/recommendations/comments/", params);
-        dispatch("init");
+        await axios.delete(`/recommendations/movies/${params.recommendation.id}`);
+        commit("setMovieRecommendations", state.movieRecommendations.filter(movieRecommendation => movieRecommendation !== params.recommendation.id));
+      } catch (err) {
+        return { success: false, message: "Unexpected server error." };
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async addComment({ commit, dispatch, state }, params) {
+      commit("setLoading", true);
+      try {
+        const response = await axios.post("/recommendations/comments/", params);
+        if (params.reloadPage) {
+          dispatch("init");
+        }
+        return { success: true, comment: response.data.movie_recommendation.comment };
+      } catch (err) {
+        return { success: false, message: "Unexpected server error." };
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async deleteComment({ commit, dispatch, state }, commentId) {
+      commit("setLoading", true);
+      try {
+        await axios.delete(`/recommendations/comments/${commentId}/`);
         return { success: true };
       } catch (err) {
         return { success: false, message: "Unexpected server error." };
@@ -58,10 +84,7 @@ export default {
           recommendations = state.movieRecommendations.concat(response.data.results);
         }
         commit("setMovieRecommendations", recommendations);
-        console.log("next page");
-        console.log(state.nextPage);
         const nextPage = response.data.next ? response.data.next.split("=")[1] : null;
-        console.log(nextPage);
         commit("setNextPage", nextPage);
         return { success: true };
       } catch (err) {

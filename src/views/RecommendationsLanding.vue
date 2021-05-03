@@ -14,7 +14,7 @@
         cols="6"
         md="2"
       >
-        <movie-card :movie="movieRecommendation.movie" />
+        <movie-recommendation-card :movie-recommendation="movieRecommendation" />
       </v-col>
     </v-row>
     <v-row v-if="nextPage && nextPage !== 1" align="center" justify="space-around">
@@ -27,11 +27,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import MovieCard from "@/components/common/MovieCard";
+import MovieRecommendationCard from "@/components/recommendations/MovieRecommendationCard";
 
 export default {
   name: "RecommendationsLanding",
-  components: { MovieCard },
+  components: { MovieRecommendationCard },
   computed: {
     ...mapGetters("movieRecommendations", ["movieRecommendations", "nextPage", "loading"])
   },
