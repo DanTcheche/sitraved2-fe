@@ -14,7 +14,7 @@
       </v-container>
     </v-main>
 
-    <notifications position="top right" ignore-duplicates />
+    <notifications position="top right" ignore-duplicates style="z-index: 1000000" />
   </v-app>
 </template>
 
