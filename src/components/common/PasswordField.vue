@@ -28,7 +28,7 @@ export default {
     passwordRules() {
       const basicRules = [
         (v) => !!v || "Password is required",
-        (v) => (v && v.length >= 8) || "Password should have at least 6 characters."
+        (v) => (v && v.length >= 8) || "Password should have at least 8 characters."
       ];
       if (this.rules) {
         return basicRules.concat(this.rules);
