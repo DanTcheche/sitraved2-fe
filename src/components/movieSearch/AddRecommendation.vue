@@ -36,7 +36,7 @@
         counter="500"
         class="add-recommendation-description"
       />
-      <v-btn color="primary" class="add-recommendation-button" @click="addRecommendation">
+      <v-btn color="primary" class="add-recommendation-button" :loading="loading" @click="addRecommendation">
         Add Recommendation
       </v-btn>
       <v-alert
@@ -62,7 +62,8 @@ export default {
   data() {
     return {
       description: "",
-      errorMessage: null
+      errorMessage: null,
+      loading: false
     };
   },
   computed: {
@@ -75,6 +76,7 @@ export default {
         return;
       }
       let response = {};
+      this.loading = true;
       if (this.selectedMovie.already_recommended_by === false) {
         response = await this.$store.dispatch("movieRecommendations/addComment",
           {
@@ -90,6 +92,7 @@ export default {
             reloadPage: true
           });
       }
+      this.loading = false;
       if (!response.success) {
         this.$notify({ type: "error", text: response.message });
         return;
