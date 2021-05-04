@@ -1,11 +1,18 @@
+@import "./variables";
+
 #recommendation-card {
   position: relative;
 
-  .recommendation-card-like-button {
+  .recommendation-card-like-section {
     position: absolute;
     bottom: 5px;
     right: 5px;
     z-index: 5;
+  }
+
+  .recommendation-count {
+    color: @color-red;
+    font-weight: bold;
   }
 }
 

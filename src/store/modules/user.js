@@ -94,7 +94,6 @@ export default {
       const response = await axios.get("/users/current/");
       if (response.status === 200) {
         commit("setUser", response.data.user);
-        dispatch("movieRecommendations/init", {}, { root: true });
       } else {
         commit("setUser", null);
       }

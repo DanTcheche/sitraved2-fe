@@ -1,15 +1,17 @@
 <template>
   <div id="recommendation-card">
     <movie-card :movie="movieRecommendation.movie" :recommender="capitalizeFirstLetter(movieRecommendation.user.username)"/>
-    <v-btn
-      class="recommendation-card-like-button"
-      icon
-      :color="color"
-      :disabled="loading"
-      @click="toggleRecommendation" >
-      <v-icon v-if="recommendedByUser">mdi-thumb-up</v-icon>
-      <v-icon v-else>mdi-thumb-up-outline</v-icon>
-    </v-btn>
+    <div class="recommendation-card-like-section">
+      <v-btn
+        icon
+        :color="color"
+        :disabled="loading"
+        @click="toggleRecommendation" >
+        <v-icon v-if="recommendedByUser">mdi-heart</v-icon>
+        <v-icon v-else>mdi-heart-outline</v-icon>
+      </v-btn>
+      <span class="recommendation-count">{{ recommendationCount }}</span>
+    </div>
   </div>
 </template>
 
@@ -25,14 +27,15 @@ export default {
   data() {
     return {
       comment: null,
-      loading: false
+      loading: false,
+      recommendationCount: this.movieRecommendation.recommendations_count
     };
   },
   computed: {
     ...mapGetters("user", ["user"]),
     color() {
       if (this.recommendedByUser) {
-        return "primary";
+        return "error";
       }
       return "warning";
     },
@@ -61,6 +64,7 @@ export default {
           response = await this.$store.dispatch("movieRecommendations/deleteComment", this.comment);
           if (response.success) {
             this.comment = null;
+            this.recommendationCount -= 1;
           }
         }
       } else {
@@ -71,6 +75,7 @@ export default {
           });
         if (response.success) {
           this.comment = response.comment;
+          this.recommendationCount += 1;
         } else {
           this.$notify({ type: "error", text: response.message });
         }
