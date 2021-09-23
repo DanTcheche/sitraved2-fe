@@ -4,8 +4,9 @@
       <v-card id="movie-card" box-shadow="none" min-width="175">
         <div @click="selectMovie" :class="{ 'show-cursor': !movie.already_recommended_by && withAddButton }">
           <v-img
-            height="315"
+            height="100%"
             width="100%"
+            max-height="410px"
             :src="`${movie.poster_url}`"
             class="movie-image"
           >
