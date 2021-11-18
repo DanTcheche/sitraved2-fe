@@ -3,7 +3,7 @@
 
     <nav-bar @toggleDrawer="toggleDrawer" :showing-drawer="this.showDrawer" />
 
-    <drawer v-model="showDrawer"/>
+<!--    <drawer v-model="showDrawer"/>-->
 
     <log-in-sign-up-dialog v-if="showUserManagementDialog"/>
     <media-search-dialog v-if="showRecommendationDialog" />
@@ -21,7 +21,6 @@
 <script>
 import Vue from "vue";
 import NavBar from "@/components/common/NavBar.vue";
-import Drawer from "@/components/common/Drawer.vue";
 import { mapGetters } from "vuex";
 import LogInSignUpDialog from "@/components/userManagement/LogInSignUpDialog";
 import MediaSearchDialog from "@/components/movieSearch/MediaSearchDialog";
@@ -31,7 +30,6 @@ export default Vue.extend({
   components: {
     MediaSearchDialog,
     LogInSignUpDialog,
-    Drawer,
     NavBar
   },
   data() {
