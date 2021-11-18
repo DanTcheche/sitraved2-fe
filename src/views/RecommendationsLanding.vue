@@ -1,11 +1,16 @@
 <template>
-  <div>
+  <div id="recommendations-landing">
     <v-row v-if="movieRecommendations">
       <v-col
         class="mt-2"
         cols="12"
       >
-        <strong>New Recommendations</strong>
+        <v-select class="sorts"
+          :items="sorts"
+          v-model="selectedSort"
+          return-object
+          @change="sort"
+        />
       </v-col>
 
       <v-col
@@ -32,12 +37,24 @@ import MovieRecommendationCard from "@/components/recommendations/MovieRecommend
 export default {
   name: "RecommendationsLanding",
   components: { MovieRecommendationCard },
+  data() {
+    return {
+      sorts: [
+        { text: "New Recommendations", value: "new" },
+        { text: "Most Liked", value: "popularity" }
+      ],
+      selectedSort: { text: "New Recommendations", value: "new" }
+    };
+  },
   computed: {
     ...mapGetters("movieRecommendations", ["movieRecommendations", "nextPage", "loading"])
   },
   methods: {
     async getNextPage() {
-      await this.$store.dispatch("movieRecommendations/getRecommendations");
+      await this.$store.dispatch("movieRecommendations/getRecommendations", { sort: this.selectedSort.value });
+    },
+    async sort() {
+      await this.$store.dispatch("movieRecommendations/getRecommendations", { sort: this.selectedSort.value, resetSearch: true });
     }
   }
 };

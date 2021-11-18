@@ -21,7 +21,7 @@ export default {
     async init({ commit, dispatch }) {
       commit("setNextPage", 1);
       commit("setMovieRecommendations", null);
-      await dispatch("getRecommendations", true);
+      await dispatch("getRecommendations", { sort: "new" });
     },
     async addRecommendation({ commit, dispatch }, params) {
       commit("setLoading", true);
@@ -73,10 +73,13 @@ export default {
         commit("setLoading", false);
       }
     },
-    async getRecommendations({ commit, state }) {
+    async getRecommendations({ commit, state, dispatch }, filters) {
       commit("setLoading", true);
       try {
-        const response = await axios.get(`/recommendations/movies/?page=${state.nextPage}`);
+        if (filters.resetSearch) {
+          dispatch("clear");
+        }
+        const response = await axios.get(`/recommendations/movies/?page=${state.nextPage}&sort=${filters.sort}`);
         let recommendations = [];
         if (!state.movieRecommendations) {
           recommendations = response.data.results;
@@ -93,8 +96,9 @@ export default {
         commit("setLoading", false);
       }
     },
-    clear({ commit }) {
-      commit("setMovies", null);
+    clear({ commit, state }) {
+      commit("setMovieRecommendations", null);
+      commit("setNextPage", 1);
       commit("setLoading", false);
     }
   }
